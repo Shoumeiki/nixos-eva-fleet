@@ -1,0 +1,3 @@
+# Show decrypted content in `git diff` instead of base64 noise
+# One-time setup per clone: git config diff.sops.textconv "sops decrypt"
+secrets/*.yaml diff=sops

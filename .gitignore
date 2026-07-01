@@ -1,0 +1,45 @@
+# Nix build artifacts
+result
+result/
+result-*
+*.drv
+
+# direnv
+.direnv/
+.envrc.local
+
+# Editor / OS junk
+.DS_Store
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+.zed/
+
+# Secrets / key material (age/sops private keys — never commit these)
+*.agekey
+*.age
+secrets/*.key
+secrets/keys.txt
+secrets/age/
+.config/sops/age/keys.txt
+
+# NOTE: sops-nix encrypted secrets are safe to commit — do not ignore
+# .sops.yaml or secrets/*.yaml
+
+# Local env files
+.env
+.env.*
+
+# nix-index / nix REPL state
+.nix-repl-history
+
+# pre-commit local state
+.pre-commit-config.yaml
+.pre-commit-config.yaml.bak
+
+# Code Agent Artefacts
+CLAUDE.md
+.claudeignore
+.claude/
