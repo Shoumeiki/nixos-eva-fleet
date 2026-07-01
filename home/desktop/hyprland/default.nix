@@ -4,7 +4,7 @@ let
     set -eu
     DIR="$HOME/Pictures/Wallpapers"
     if [ ! -d "$DIR" ]; then
-    echo "random-wallpaper: $DIR does not exist" >&2
+      echo "random-wallpaper: $DIR does not exist" >&2
       exit 0
     fi
     WALL=$(${pkgs.findutils}/bin/find "$DIR" -type f \
@@ -14,8 +14,14 @@ let
       echo "random-wallpaper: no images found in $DIR" >&2
       exit 0
     fi
-    hyprctl hyprpaper preload "$WALL"
-    hyprctl hyprpaper wallpaper ",$WALL"
+    # Wait for hyprpaper's IPC socket instead of guessing a fixed delay
+    SOCK="$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.hyprpaper.sock"
+    for _ in $(seq 1 50); do
+      [ -S "$SOCK" ] && break
+      sleep 0.1
+    done
+    # "wallpaper" is the only hyprpaper request hyprctl exposes now — it
+    # loads and applies in one call, no separate "preload" needed
     hyprctl hyprpaper wallpaper ",$WALL"
   '';
 in
@@ -37,12 +43,13 @@ in
     settings = {
       "$mainMod" = "SUPER";
       "$terminal" = "ghostty";
-      "$fileManager" = "thunar";
+      "$fileManager" = "ghostty -e yazi";
       "$menu" = "rofi -show drun";
       "$browser" = "zen-beta";
       "$browser2" = "helium";
       "$editor" = "zeditor";
       "$chat" = "signal-desktop";
+      "$chat2" = "vesktop";
       "$powerMenu" = "wlogout";
 
       env = [
@@ -54,7 +61,7 @@ in
 
       "exec-once" = [
         "hyprctl output create headless"
-        "sleep 1 && ${lib.getExe randomWallpaper}"
+        "${lib.getExe randomWallpaper}"
       ];
     };
 

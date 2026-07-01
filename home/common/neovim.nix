@@ -92,9 +92,12 @@
 
 
       -- Plugin setup
-      require("nvim-treesitter.configs").setup({
-        highlight = { enable = true },
-        indent = { enable = true },
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "nix", "lua", "vim", "bash", "fish", "json", "yaml", "toml", "markdown", "python", "rust", "c", "cpp", "go", "javascript", "typescript", "html", "css" },
+        callback = function()
+          vim.treesitter.start()
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
       })
 
       require("lualine").setup({ options = { theme = "auto" } })
@@ -115,23 +118,23 @@
 
 
       -- LSP
-      local lspconfig = require("lspconfig")
-
-      lspconfig.nil_ls.setup({
+      vim.lsp.config("nil_ls", {
         settings = {
           ["nil"] = {
             formatting = { command = { "nixfmt" } },
           },
         },
       })
+      vim.lsp.enable("nil_ls")
 
-      lspconfig.lua_ls.setup({
+      vim.lsp.config("lua_ls", {
         settings = {
           Lua = {
             diagnostics = { globals = { "vim" } },
           },
         },
       })
+      vim.lsp.enable("lua_ls")
 
       -- Buffer-local LSP keybinds on attach
       vim.api.nvim_create_autocmd("LspAttach", {

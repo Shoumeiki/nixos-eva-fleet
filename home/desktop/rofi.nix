@@ -102,8 +102,8 @@ in
       drun-display-format = "{name}";
       terminal = "${pkgs.ghostty}/bin/ghostty";
       kb-cancel = "Escape,Super+d";
-      kb-row-up = "Up,Control+k";
-      kb-row-down = "Down,Control+j";
+      kb-row-up = "Up";
+      kb-row-down = "Down";
       kb-accept-entry = "Return,KP_Enter";
       cycle = true;
       display-drun = "";

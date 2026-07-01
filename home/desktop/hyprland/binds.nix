@@ -21,6 +21,7 @@ in
       "$mainMod, B, exec, $browser"
       "$mainMod SHIFT, B, exec, $browser2"
       "$mainMod, C, exec, $chat"
+      "$mainMod SHIFT, C, exec, $chat2"
       "$mainMod, Z, exec, $editor"
 
       # Power and session

@@ -91,6 +91,7 @@
                 # Back up any pre-existing plain file a module would otherwise
                 # overwrite, instead of failing the activation
                 backupFileExtension = "backup";
+                overwriteBackup = true;
               };
             }
           ];

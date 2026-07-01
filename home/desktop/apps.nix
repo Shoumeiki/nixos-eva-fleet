@@ -11,7 +11,11 @@
     mpv.enable = true;
     zathura.enable = true;
     ncmpcpp.enable = true;
-    zed-editor.enable = true;
+    zed-editor = {
+      enable = true;
+      themes.duskrose = builtins.fromJSON (builtins.readFile ./zed-themes/duskrose.json);
+      userSettings.theme = "Base16 DuskRose";
+    };
     vesktop.enable = true;
     obsidian.enable = true;
     mangohud.enable = true;
@@ -39,6 +43,7 @@
 
   services = {
     swayosd.enable = true;
+    udiskie.enable = true;
 
     mpd = {
       enable = true;
@@ -99,5 +104,12 @@
 
     # Dev tools
     docker-compose
+
+    # yazi
+    ouch
+    ffmpegthumbnailer
+    poppler
+    fd
+    ripgrep
   ];
 }

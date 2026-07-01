@@ -5,7 +5,7 @@ _: {
     mpv.enable = true;
     zathura.enable = true;
     mako.enable = true;
-    zed.enable = true;
+    zed.enable = false;
     vesktop.enable = true;
     mangohud.enable = true;
     obsidian.enable = true;
