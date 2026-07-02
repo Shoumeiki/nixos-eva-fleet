@@ -1,4 +1,5 @@
-_: {
+{ pkgs, ... }:
+{
   nix = {
     settings = {
       experimental-features = [
@@ -25,6 +26,13 @@ _: {
     nix-index.enable = true;
     nix-ld.enable = true;
   };
+
+  security.pki.certificateFiles = [
+    ./certs/caddy-root.crt
+  ];
+  # Run to insert into Chromium database
+  # `certutil -d sql:$HOME/.pki/nssdb -A -n "Caddy Local Root" -t "TC,C,C" -i ${./certs/caddy-root.crt}`
+  environment.systemPackages = [ pkgs.nssTools ];
 
   nixpkgs.config = {
     allowUnfree = true;

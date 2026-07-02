@@ -1,10 +1,31 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 let
   avatarsDir = "${config.home.homeDirectory}/Pictures/Avatars";
-  defaultAvatar = "${avatarsDir}/default.png";
+  defaultAvatar = "${avatarsDir}/default.jpg";
+  # hyprlock's color options take rgb(RRGGBB), not "#hex"
+  rgb = hex: "rgb(${hex})";
+  colors = config.lib.stylix.colors;
+
+  # hyprlock has no native hyprpaper integration, so resolve the
+  # currently-active wallpaper via IPC and hand it to hyprlock through
+  # an env var ($WALLPAPER is expanded by hyprlang at config parse time)
+  hyprlockWrapper = pkgs.writeShellScriptBin "hyprlock-wrapper" ''
+    set -eu
+    WALLPAPER=$(hyprctl hyprpaper listactive 2>/dev/null \
+      | ${pkgs.gawk}/bin/awk -F': ' 'NR==1 {print $2}')
+    export WALLPAPER="''${WALLPAPER:-${defaultAvatar}}"
+
+    AVATAR=$(${pkgs.findutils}/bin/find ${avatarsDir} -type f 2>/dev/null \
+      | ${pkgs.coreutils}/bin/shuf -n 1)
+    export AVATAR="''${AVATAR:-${defaultAvatar}}"
+
+    exec ${config.programs.hyprlock.package}/bin/hyprlock
+  '';
 in
 {
   stylix.targets.hyprlock.enable = false;
+
+  home.packages = [ hyprlockWrapper ];
 
   # Lock screen
   programs.hyprlock = {
@@ -20,23 +41,24 @@ in
         {
           monitor = "";
           path = "screenshot";
-          blur_passes = 0;
-          brightness = 0.5;
+          blur_passes = 2;
+          blur_size = 4;
+          noise = 0.02;
+          contrast = 0.9;
+          brightness = 0.6;
         }
       ];
 
       image = [
         {
           monitor = "";
-          path = defaultAvatar;
+          path = "$AVATAR";
           size = 200;
-          rounding = -1;
+          rounding = 8;
           border_size = 2;
           position = "-300, 0";
           halign = "center";
           valign = "center";
-          reload_cmd = "find ${avatarsDir} -type f 2>/dev/null | shuf -n 1";
-          reload_time = -1;
         }
       ];
 
@@ -58,7 +80,14 @@ in
           position = "0, 0";
           halign = "center";
           valign = "center";
+          rounding = 8;
           outline_thickness = 2;
+          inner_color = rgb colors.base01;
+          outer_color = rgb colors.base0D;
+          check_color = rgb colors.base0B;
+          fail_color = rgb colors.base08;
+          font_color = rgb colors.base05;
+          placeholder_color = rgb colors.base03;
           dots_size = 0.25;
           dots_spacing = 0.3;
           fade_on_empty = false;
@@ -75,7 +104,7 @@ in
       enable = true;
       settings = {
         general = {
-          lock_cmd = "pidof hyprlock || hyprlock";
+          lock_cmd = "pidof hyprlock || hyprlock-wrapper";
           before_sleep_cmd = "loginctl lock-session";
           after_sleep_cmd = "hyprctl dispatch dpms on";
         };

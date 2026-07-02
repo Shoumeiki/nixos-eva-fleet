@@ -26,7 +26,7 @@ in
 
       # Power and session
       "$mainMod, P, exec, $powerMenu"
-      "$mainMod, L, exec, hyprlock"
+      "$mainMod, L, exec, hyprlock-wrapper"
       "$mainMod SHIFT, M, exit"
 
       # Window management
