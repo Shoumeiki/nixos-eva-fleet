@@ -7,6 +7,9 @@ export NH_FLAKE := justfile_directory()
 # Target host for nh commands
 host := "unit-01"
 
+# Target user for home-manager commands
+user := "ellen"
+
 # Show available targets
 default:
     @just --list
@@ -14,6 +17,10 @@ default:
 # Apply the current flake to the running system
 switch: fmt check
     nh os switch --hostname {{host}}
+
+# Apply only the home-manager profile, skipping a full system rebuild
+home:
+    nix build .#nixosConfigurations.{{host}}.config.home-manager.users.{{user}}.home.activationPackage --no-link --print-out-paths | xargs -I{} {}/activate
 
 # Apply to next boot
 boot:
