@@ -2,6 +2,7 @@
 {
   imports = [
     ./cli-tools.nix
+    ./fastfetch.nix
     ./git.nix
     ./neovim.nix
     ./shell.nix

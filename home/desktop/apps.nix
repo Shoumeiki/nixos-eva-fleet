@@ -81,6 +81,7 @@
     # Creative
     krita
     audacity
+    pinta
 
     # Notes and docs
     libreoffice-fresh

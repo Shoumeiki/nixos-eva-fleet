@@ -5,7 +5,6 @@
     eza.enable = true;
     bat.enable = true;
     btop.enable = true;
-    fastfetch.enable = true;
     jq.enable = true;
     bottom.enable = true;
 

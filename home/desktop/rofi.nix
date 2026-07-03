@@ -11,7 +11,7 @@ let
     }
 
     window {
-      background-color: ${c.base00};
+      background-color: ${c.base00}80;
       border:           2px solid;
       border-color:     ${c.base0D};
       border-radius:    18px;
@@ -29,7 +29,7 @@ let
 
     /* Search bar */
     inputbar {
-      background-color: ${c.base01};
+      background-color: ${c.base01}b3;
       border-radius:    999px;
       padding:          10px 20px;
       children:         [ entry ];
@@ -60,7 +60,7 @@ let
     }
 
     element selected {
-      background-color: ${c.base01};
+      background-color: ${c.base01}b3;
       text-color:       ${c.base0D};
     }
 
