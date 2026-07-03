@@ -1,135 +1,174 @@
-_: {
+{ config, ... }:
+let
+  c = config.lib.stylix.colors.withHashtag;
+in
+{
+  programs.fish.functions.fastfetch = ''
+    set -l avatars ~/Pictures/Avatars/*
+    command fastfetch --logo-type kitty --logo (random choice $avatars) $argv
+  '';
+
   programs.fastfetch = {
     enable = true;
     settings = {
       logo = {
-        type = "small";
+        type = "auto";
         padding = {
           top = 1;
           right = 2;
+          left = 1;
         };
+        height = 15;
       };
-
-      display = {
-        separator = "  ";
-        color = {
-          keys = "cyan";
-          title = "magenta";
-        };
-      };
-
       modules = [
         "break"
         {
+          type = "command";
+          key = "  ";
+          keyWidth = 2;
+          text =
+            let
+              hex = builtins.substring 1 6 c.base03;
+              r = builtins.substring 0 2 hex;
+              g = builtins.substring 2 2 hex;
+              b = builtins.substring 4 2 hex;
+            in
+            "printf -- '\\033[38;2;%d;%d;%dm──── %s@%s ─ 󰃮 %s ────\\033[0m' 0x${r} 0x${g} 0x${b} \"$USER\" \"$(hostname)\" \"$(date '+%d/%m/%Y %H:%M')\"";
+        }
+        "break"
+        {
+          type = "custom";
+          format = "[90m┌──────────────────Hardware──────────────────┐";
+        }
+        {
           type = "title";
-          color = {
-            user = "magenta";
-            at = "white";
-            host = "magenta";
-          };
-        }
-        {
-          type = "custom";
-          format = "[90m─────────────────────────────[0m";
-        }
-
-        {
-          type = "os";
-          key = "  OS";
-          keyColor = "blue";
-        }
-        {
-          type = "kernel";
-          key = "  Kernel";
-          keyColor = "blue";
-        }
-        {
-          type = "uptime";
-          key = "  Uptime";
-          keyColor = "blue";
-        }
-        {
-          type = "packages";
-          key = "  Packages";
-          keyColor = "blue";
-        }
-        {
-          type = "shell";
-          key = "  Shell";
-          keyColor = "blue";
-        }
-
-        "break"
-        {
-          type = "custom";
-          format = "[35m  Desktop[0m";
-        }
-        {
-          type = "de";
-          key = "  DE";
-          keyColor = "magenta";
-        }
-        {
-          type = "wm";
-          key = "  WM";
-          keyColor = "magenta";
-        }
-        {
-          type = "wmtheme";
-          key = "  Theme";
-          keyColor = "magenta";
-        }
-        {
-          type = "terminal";
-          key = "  Terminal";
-          keyColor = "magenta";
-        }
-        {
-          type = "terminalfont";
-          key = "  Font";
-          keyColor = "magenta";
-        }
-
-        "break"
-        {
-          type = "custom";
-          format = "[32m  Hardware[0m";
+          key = " 󰌢  PC";
+          format = "{host-name}";
+          keyColor = c.base08;
         }
         {
           type = "cpu";
-          key = "  CPU";
-          keyColor = "green";
+          key = " │ ├ ";
+          format = "{1} @ {7}";
+          keyColor = c.base08;
         }
         {
           type = "gpu";
-          key = "  GPU";
-          keyColor = "green";
+          key = " │ ├󰾲 ";
+          hideType = "integrated";
+          format = "{1} {2}";
+          keyColor = c.base08;
         }
         {
           type = "memory";
-          key = "  Memory";
-          keyColor = "green";
+          key = " │ ├󰑭 ";
+          keyColor = c.base08;
         }
         {
           type = "disk";
-          key = "  Disk";
-          keyColor = "green";
+          key = " │ ├󰋊 ";
+          format = "{1} / {2} ({3})";
+          keyColor = c.base08;
         }
         {
-          type = "battery";
-          key = "  Battery";
-          keyColor = "green";
+          type = "command";
+          key = " │ ├󰍹 ";
+          text = "hyprctl monitors -j | jq -r '.[] | select(.name==\"DP-1\") | \"\\(.width)x\\(.height), \\(.refreshRate | floor)Hz\"'";
+          keyColor = c.base08;
         }
-
-        "break"
+        {
+          type = "command";
+          key = " │ ├󱡶 ";
+          text = "hyprctl monitors -j | jq -r '.[] | select(.name==\"HDMI-A-1\") | \"\\(.width)x\\(.height), \\(.refreshRate | floor)Hz\"'";
+          keyColor = c.base08;
+        }
         {
           type = "localip";
-          key = "  Local IP";
-          keyColor = "yellow";
+          key = " │ ├󰲝 ";
+          keyColor = c.base08;
+        }
+        {
+          type = "uptime";
+          key = " └ └ ";
+          keyColor = c.base08;
+        }
+        {
+          type = "custom";
+          format = "[90m└────────────────────────────────────────────┘";
+        }
+        "break"
+        {
+          type = "custom";
+          format = "[90m┌──────────────────Software──────────────────┐";
+        }
+        {
+          type = "os";
+          key = "   OS";
+          keyColor = c.base09;
+        }
+        {
+          type = "kernel";
+          key = " │ ├ ";
+          keyColor = c.base09;
+        }
+        {
+          type = "packages";
+          key = " │ ├󰏖 ";
+          keyColor = c.base09;
+        }
+        {
+          type = "shell";
+          key = " │ ├󰞷 ";
+          keyColor = c.base09;
+        }
+        {
+          type = "command";
+          key = " └ └󱦟 ";
+          text = "birth_install=$(stat -c %W /); current=$(date +%s); time_progression=$((current - birth_install)); days_difference=$((time_progression / 86400)); echo $days_difference days";
+          keyColor = c.base09;
+        }
+        "break"
+        {
+          type = "de";
+          key = " 󰧨  DE";
+          keyColor = c.base09;
+        }
+        {
+          type = "wm";
+          key = "   WM";
+          keyColor = c.base09;
+        }
+        {
+          type = "lm";
+          key = " │ ├ ";
+          format = "{1}";
+          keyColor = c.base09;
+        }
+        {
+          type = "wmtheme";
+          key = " │ ├󰉦 ";
+          keyColor = c.base09;
+        }
+        {
+          type = "terminal";
+          key = " │ ├󰆍 ";
+          keyColor = c.base09;
+        }
+        {
+          type = "terminalfont";
+          key = " └ └ ";
+          format = "{1}";
+          keyColor = c.base09;
+
+        }
+        {
+          type = "custom";
+          format = "[90m└────────────────────────────────────────────┘";
         }
         "break"
         {
           type = "colors";
+          paddingLeft = 15;
           symbol = "circle";
         }
         "break"

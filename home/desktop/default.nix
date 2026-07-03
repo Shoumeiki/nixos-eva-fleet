@@ -1,6 +1,7 @@
 _: {
   imports = [
     ./apps.nix
+    ./ghostty.nix
     ./rofi.nix
     ./stylix.nix
     ./waybar.nix

@@ -1,8 +1,24 @@
-{ config, ... }:
+{ config, lib, ... }:
 let
-  c = config.lib.stylix.colors.withHashtag;
+  colors = config.lib.stylix.colors;
+  c = colors.withHashtag;
   font = config.stylix.fonts.sansSerif.name;
   fontSize = config.stylix.fonts.sizes.desktop * 3 / 2;
+
+  # GTK's CSS parser rejects #RRGGBBAA — build rgba() from a hex color
+  # and a 0.0-1.0 stylix.opacity value instead.
+  hexMap = lib.listToAttrs (
+    lib.imap0 (i: ch: lib.nameValuePair ch i) (lib.stringToCharacters "0123456789abcdef")
+  );
+  hexPairVal =
+    pair: hexMap.${builtins.substring 0 1 pair} * 16 + hexMap.${builtins.substring 1 1 pair};
+  rgba =
+    hex: opacity:
+    "rgba(${toString (hexPairVal (builtins.substring 0 2 hex))}, ${
+      toString (hexPairVal (builtins.substring 2 2 hex))
+    }, ${toString (hexPairVal (builtins.substring 4 2 hex))}, ${toString opacity})";
+  pillBg = rgba colors.base01 config.stylix.opacity.desktop;
+  activeBg = rgba colors.base02 config.stylix.opacity.desktop;
 in
 {
   stylix.targets.waybar.enable = false;
@@ -27,7 +43,7 @@ in
       .modules-left,
       .modules-center,
       .modules-right {
-        background-color: ${c.base01};
+        background-color: ${pillBg};
         border-radius:    9999px;
         margin:           8px 4px;
         padding:          6px 18px;
@@ -45,12 +61,12 @@ in
 
       #workspaces button.active,
       #workspaces button.focused {
-        background-color: ${c.base02};
+        background-color: ${activeBg};
         color:            ${c.base05};
       }
 
       #workspaces button:hover {
-        background-color: ${c.base02};
+        background-color: ${activeBg};
         color:            ${c.base05};
       }
 

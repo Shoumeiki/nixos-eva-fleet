@@ -73,6 +73,16 @@ in
       size = 24;
     };
 
+    # Single source of truth for background translucency — targets that
+    # bypass stylix's own theming (ghostty, waybar, rofi; see their
+    # `stylix.targets.*.enable = false`) read these values directly instead.
+    opacity = {
+      terminal = 0.85;
+      applications = 0.85;
+      popups = 0.85;
+      desktop = 0.85;
+    };
+
     targets = {
       console.enable = true;
       limine.enable = true;

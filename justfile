@@ -16,23 +16,23 @@ default:
 
 # Apply the current flake to the running system
 switch: fmt check
-    nh os switch --hostname {{host}}
+    nh os switch --hostname {{ host }}
 
 # Apply only the home-manager profile, skipping a full system rebuild
 home:
-    nix build .#nixosConfigurations.{{host}}.config.home-manager.users.{{user}}.home.activationPackage --no-link --print-out-paths | xargs -I{} {}/activate
+    nix build .#nixosConfigurations.{{ host }}.config.home-manager.users.{{ user }}.home.activationPackage --no-link --print-out-paths | xargs -I{} sh -c '{}/activate'
 
 # Apply to next boot
 boot:
-    nh os boot --hostname {{host}}
+    nh os boot --hostname {{ host }}
 
 # Build and activate without adding to bootloader
 test:
-    nh os test --hostname {{host}}
+    nh os test --hostname {{ host }}
 
 # Show changes without applying
 dry:
-    nh os switch --hostname {{host}} --dry
+    nh os switch --hostname {{ host }} --dry
 
 # Validate flake with all linters
 check:
@@ -42,7 +42,7 @@ check:
 
 # Build top-level system without activation
 build:
-    nix build .#nixosConfigurations.{{host}}.config.system.build.toplevel
+    nix build .#nixosConfigurations.{{ host }}.config.system.build.toplevel
 
 # Format the tree
 fmt:
@@ -50,7 +50,7 @@ fmt:
 
 # Update flake inuts and switch
 update:
-    nh os switch --hostname {{host}} --update
+    nh os switch --hostname {{ host }} --update
 
 # Garbace collection
 gc:

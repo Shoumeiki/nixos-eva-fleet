@@ -2,6 +2,7 @@ _: {
   programs = {
     fish = {
       enable = true;
+      interactiveShellInit = "set -g fish_greeting";
       shellAbbrs = {
         # Nix workflow
         rebuild = "nh os switch";
@@ -27,6 +28,11 @@ _: {
         df = "duf";
         ps = "procs";
         top = "btop";
+        mkdir = "mkdir -pv";
+        rm = "rm -rfv";
+        c = "clear";
+        cp = "cp -iv";
+        mv = "mv -iv";
 
         # Git
         gs = "git status";

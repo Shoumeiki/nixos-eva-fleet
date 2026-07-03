@@ -1,8 +1,24 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   c = config.lib.stylix.colors.withHashtag;
   font = config.stylix.fonts.sansSerif.name;
   fontSize = config.stylix.fonts.sizes.applications * 2;
+
+  # 2-digit hex alpha suffix from a 0.0-1.0 stylix.opacity value
+  hexDigits = "0123456789abcdef";
+  toHex1 = d: builtins.substring d 1 hexDigits;
+  alphaHex =
+    opacity:
+    let
+      n = builtins.floor (opacity * 255 + 0.5);
+    in
+    toHex1 (n / 16) + toHex1 (lib.mod n 16);
+  a = alphaHex config.stylix.opacity.popups;
 
   theme = pkgs.writeText "rofi-theme.rasi" ''
     * {
@@ -11,7 +27,7 @@ let
     }
 
     window {
-      background-color: ${c.base00}80;
+      background-color: ${c.base00}${a};
       border:           2px solid;
       border-color:     ${c.base0D};
       border-radius:    18px;
@@ -29,7 +45,7 @@ let
 
     /* Search bar */
     inputbar {
-      background-color: ${c.base01}b3;
+      background-color: ${c.base01}${a};
       border-radius:    999px;
       padding:          10px 20px;
       children:         [ entry ];
@@ -60,7 +76,7 @@ let
     }
 
     element selected {
-      background-color: ${c.base01}b3;
+      background-color: ${c.base01}${a};
       text-color:       ${c.base0D};
     }
 

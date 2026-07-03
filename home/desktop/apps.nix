@@ -25,16 +25,6 @@
       profiles.default = { };
     };
 
-    ghostty = {
-      enable = true;
-      settings = {
-        scrollback-limit = 10000000;
-        confirm-close-surface = false;
-        window-padding-x = 8;
-        window-padding-y = 8;
-      };
-    };
-
     yazi = {
       enable = true;
       enableFishIntegration = true;

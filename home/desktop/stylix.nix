@@ -1,6 +1,6 @@
 _: {
   stylix.targets = {
-    ghostty.enable = true;
+    ghostty.enable = false;
     yazi.enable = true;
     mpv.enable = true;
     zathura.enable = true;
