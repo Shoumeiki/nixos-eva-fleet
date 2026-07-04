@@ -35,10 +35,7 @@ in
 
     settings = {
       theme = "DuskRose";
-      font-family = [
-        config.stylix.fonts.monospace.name
-        config.stylix.fonts.emoji.name
-      ];
+      font-family = config.stylix.fonts.monospace.name;
       font-size = config.stylix.fonts.sizes.terminal;
       scrollback-limit = 10000000;
       confirm-close-surface = false;

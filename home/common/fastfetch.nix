@@ -157,7 +157,7 @@ in
         {
           type = "terminalfont";
           key = " └ └ ";
-          format = "{1}";
+          format = "{name}";
           keyColor = c.base09;
 
         }
