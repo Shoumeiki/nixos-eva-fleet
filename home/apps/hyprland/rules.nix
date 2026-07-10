@@ -13,6 +13,8 @@ lib.mkIf config.nerv.capabilities.desktop {
       # Skip Hyprland's render delay for games (reduces input latency)
       "match:class ^(steam_app_)(.*)$, immediate true"
 
+      "match:title ^(Minecraft.*)$, float true, size 70% 70%, center true, immediate true, idle_inhibit always, no_blur true, no_shadow true, rounding 0"
+
       "match:class ^(pavucontrol)$, float true"
       "match:class ^(blueman-manager)$, float true"
       "match:class ^(nm-connection-editor)$, float true"

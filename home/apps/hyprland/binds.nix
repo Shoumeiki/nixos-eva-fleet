@@ -23,6 +23,7 @@ lib.mkIf config.nerv.capabilities.desktop {
       "$mainMod, D, exec, $menu"
       "$mainMod, Space, exec, $menu"
       "$mainMod, E, exec, $fileManager"
+      "$mainMod SHIFT, E, exec, $fileManager2"
       "$mainMod, B, exec, $browser"
       "$mainMod SHIFT, B, exec, $browser2"
       "$mainMod, C, exec, $chat"

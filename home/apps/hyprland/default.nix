@@ -49,7 +49,8 @@ in
       settings = {
         "$mainMod" = "SUPER";
         "$terminal" = "kitty";
-        "$fileManager" = "kitty -e yazi";
+        "$fileManager" = "dolphin";
+        "$fileManager2" = "kitty -e yazi";
         "$menu" = "rofi -show drun";
         "$browser" = "zen-beta";
         "$browser2" = "helium";
