@@ -39,8 +39,9 @@ from scratch.
 
 ## Adding a new host
 
-1. Add the host under `hosts/<hostname>/`, importing `modules/core/secrets.nix`
-   (already default for all hosts).
+1. Add the host under `hosts/<hostname>/` and register it in `flake.nix`'s
+   `hosts` registry (`modules/core/secrets.nix` is already part of every
+   host via the shared `modules/` aggregator — nothing to import manually).
 2. Install the host once so `/etc/ssh/ssh_host_ed25519_key.pub` exists.
 3. Get its age public key:
 
@@ -57,6 +58,21 @@ from scratch.
    ```
 
 6. Rebuild — secrets decrypt automatically at activation.
+
+### Host-scoped secrets
+
+Most secrets (e.g. `ellen-password-hash`) live in the single shared
+`secrets/secrets.yaml`, readable by every host's key. A secret that only one
+host should ever decrypt (a service token for the future home-server, say)
+goes in its own `secrets/hosts/<hostname>.yaml` instead:
+
+1. Add a `creation_rules` entry scoped to `secrets/hosts/<hostname>\.yaml$`,
+   with only the admin key and that host's key.
+2. Declare the secret at its point of use with an explicit
+   `sopsFile = ../../secrets/hosts/<hostname>.yaml;`.
+
+This keeps a compromised or rotated host-specific secret from needing every
+other host's key touched.
 
 ## Editing secrets
 

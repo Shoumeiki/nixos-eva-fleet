@@ -19,11 +19,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    stylix = {
-      url = "github:nix-community/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs = {
@@ -52,7 +47,6 @@
     {
       self,
       nixpkgs,
-      home-manager,
       treefmt-nix,
       git-hooks,
       ...
@@ -60,8 +54,33 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
-      moduleArgs = { inherit inputs self; };
       treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+
+      fleetLib = import ./lib { inherit inputs self; };
+
+      # The fleet's host registry: hostname -> { capabilities, users, system }.
+      # `users` defaults to [ "ellen" ]; add "guest" only on desktop-type hosts.
+      hosts = {
+        unit-01 = {
+          capabilities = [
+            "desktop"
+            "gaming"
+            "virtualisation"
+            "creative"
+          ];
+          users = [
+            "ellen"
+            "guest"
+          ];
+        };
+
+        # Headless Docker-services host — eval-proof stub, no real hardware
+        # yet (see hosts/server-01/hardware.nix). `users` defaults to
+        # [ "ellen" ]: no guest account on a headless host.
+        server-01 = {
+          capabilities = [ "server" ];
+        };
+      };
 
       preCommitCheck = git-hooks.lib.${system}.run {
         src = ./.;
@@ -73,30 +92,7 @@
       };
     in
     {
-      nixosConfigurations = {
-        unit-01 = nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = moduleArgs;
-          modules = [
-            ./hosts/unit-01
-            inputs.sops-nix.nixosModules.sops
-            inputs.stylix.nixosModules.stylix
-            home-manager.nixosModules.home-manager
-            {
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                extraSpecialArgs = moduleArgs;
-
-                # Back up any pre-existing plain file a module would otherwise
-                # overwrite, instead of failing the activation
-                backupFileExtension = "backup";
-                overwriteBackup = true;
-              };
-            }
-          ];
-        };
-      };
+      nixosConfigurations = builtins.mapAttrs fleetLib.mkHost hosts;
 
       # `nix fmt` > treefmt wrapper
       formatter.${system} = treefmtEval.config.build.wrapper;

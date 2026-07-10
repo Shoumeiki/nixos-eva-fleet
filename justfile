@@ -4,15 +4,19 @@ set shell := ["bash", "-cu"]
 
 export NH_FLAKE := justfile_directory()
 
-# Target host for nh commands
-host := "unit-01"
+# Target host for nh commands (override: just host=server-01 <recipe>)
+host := `hostname`
 
-# Target user for home-manager commands
-user := "ellen"
+# Target user for home-manager commands (override: just user=guest <recipe>)
+user := `whoami`
 
 # Show available targets
 default:
     @just --list
+
+# List every host in the fleet registry
+hosts:
+    nix eval --json .#nixosConfigurations --apply builtins.attrNames
 
 # Apply the current flake to the running system
 switch: fmt check
