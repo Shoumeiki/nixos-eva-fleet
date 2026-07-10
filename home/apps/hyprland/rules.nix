@@ -2,12 +2,7 @@
 lib.mkIf config.nerv.capabilities.desktop {
   wayland.windowManager.hyprland.settings = {
     layerrule = [
-      "blur on, match:namespace waybar"
-      "ignore_alpha 0.0, match:namespace waybar"
-      "blur on, match:namespace notifications"
-      "ignore_alpha 0.0, match:namespace notifications"
-      "blur on, match:namespace rofi"
-      "ignore_alpha 0.0, match:namespace rofi"
+      "no_anim true, match:namespace ^(dms:.*)$"
     ];
     windowrule = [
       # Skip Hyprland's render delay for games (reduces input latency)
@@ -15,6 +10,7 @@ lib.mkIf config.nerv.capabilities.desktop {
 
       "match:title ^(Minecraft.*)$, float true, size 70% 70%, center true, immediate true, idle_inhibit always, no_blur true, no_shadow true, rounding 0"
 
+      "match:class ^(org.quickshell)$, float true"
       "match:class ^(pavucontrol)$, float true"
       "match:class ^(blueman-manager)$, float true"
       "match:class ^(nm-connection-editor)$, float true"

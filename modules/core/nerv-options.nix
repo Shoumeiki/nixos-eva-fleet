@@ -32,7 +32,7 @@ in
 
     hardware = {
       # Single source of truth for monitor topology — consumed by
-      # home-manager's hyprland/waybar/fastfetch modules instead of each
+      # home-manager's hyprland/dms/fastfetch modules instead of each
       # hardcoding output names independently.
       monitors = lib.mkOption {
         type = lib.types.listOf (

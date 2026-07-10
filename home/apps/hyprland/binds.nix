@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 let
@@ -11,7 +10,6 @@ let
     "$mainMod SHIFT, ${n}, movetoworkspace, ${n}"
   ]) ws;
 
-  swayosd = lib.getExe' pkgs.swayosd "swayosd-client";
   focusedMonitor = "$(hyprctl activeworkspace -j | jq -r .monitor)";
 in
 lib.mkIf config.nerv.capabilities.desktop {
@@ -31,15 +29,14 @@ lib.mkIf config.nerv.capabilities.desktop {
       "$mainMod, Z, exec, $editor"
 
       # Power and session
-      "$mainMod, P, exec, $powerMenu"
-      "$mainMod, L, exec, hyprlock-wrapper"
+      "$mainMod, P, exec, dms ipc call powermenu toggle"
+      "$mainMod, L, exec, dms ipc call lock lock"
       "$mainMod SHIFT, M, exit"
 
       # Window management
       "$mainMod, Q, killactive"
       "$mainMod, V, togglefloating"
       "$mainMod, F, fullscreen"
-      "$mainMod, P, pseudo"
       "$mainMod, J, layoutmsg, togglesplit"
 
       # Focus
@@ -63,7 +60,7 @@ lib.mkIf config.nerv.capabilities.desktop {
       "$mainMod SHIFT, Print, exec, mkdir -p ~/Pictures/Screenshots && grim -o \"${focusedMonitor}\" ~/Pictures/Screenshots/$(date +%Y%m%d-%H%M%S).png"
 
       # Clipboard history
-      "$mainMod SHIFT, V, exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy"
+      "$mainMod SHIFT, V, exec, dms ipc call clipboard toggle"
 
       # Passthrough
       "$mainMod, escape, submap, passthrough"
@@ -78,14 +75,14 @@ lib.mkIf config.nerv.capabilities.desktop {
 
     # Repeating bindings
     binde = [
-      ", XF86AudioRaiseVolume, exec, ${swayosd} --output-volume raise"
-      ", XF86AudioLowerVolume, exec, ${swayosd} --output-volume lower"
+      ", XF86AudioRaiseVolume, exec, dms ipc call audio increment 5"
+      ", XF86AudioLowerVolume, exec, dms ipc call audio decrement 5"
     ];
 
     # Lock-safe bindings
     bindl = [
-      ", XF86AudioMute, exec, ${swayosd} --output-volume mute-toggle"
-      ", XF86AudioMicMute, exec, ${swayosd} --input-volume mute-toggle"
+      ", XF86AudioMute, exec, dms ipc call audio mute"
+      ", XF86AudioMicMute, exec, dms ipc call audio micmute"
       ", XF86AudioPlay, exec, playerctl play-pause"
       ", XF86AudioNext, exec, playerctl next"
       ", XF86AudioPrev, exec, playerctl previous"

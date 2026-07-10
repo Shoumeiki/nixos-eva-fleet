@@ -3,6 +3,8 @@
   programs.fzf = {
     enable = true;
     enableFishIntegration = true;
+    # Atuin owns Ctrl-R for history search.
+    historyWidget.fish.command = "";
     colors = with theme.palette.hexH; {
       fg = base05;
       bg = base00;

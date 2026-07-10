@@ -12,7 +12,9 @@
   config = lib.mkIf config.nerv.capabilities.desktop {
     programs.zen-browser = {
       enable = true;
-      profiles.default = { };
+      profiles.default = {
+        settings."security.enterprise_roots.enabled" = true;
+      };
     };
   };
 }

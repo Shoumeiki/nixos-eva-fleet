@@ -34,7 +34,7 @@
   nerv.disk.device = "/dev/disk/by-id/nvme-CT1000P3PSSD8_2349457CF10F";
 
   # Single source of truth for monitor topology and GPU vendor — consumed by
-  # home-manager's hyprland/waybar/fastfetch/nvtop modules via osConfig.
+  # home-manager's hyprland/dms/fastfetch/nvtop modules via osConfig.
   nerv.hardware = {
     gpu.vendor = "amd";
     monitors = [

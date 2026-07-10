@@ -19,8 +19,6 @@ _: {
     ./nix-tools
     ./fastfetch
     ./kitty
-    ./rofi
-    ./waybar
     ./hyprland
     ./mpv
     ./zathura
@@ -31,15 +29,13 @@ _: {
     ./yazi
     ./gtk
     ./qt
-    ./swayosd
     ./udiskie
     ./mpd
-    ./mako
     ./zed
     ./signal
     ./imv
     ./dolphin
-    ./theme-toggle
     ./desktop-utils
+    ./dms
   ];
 }

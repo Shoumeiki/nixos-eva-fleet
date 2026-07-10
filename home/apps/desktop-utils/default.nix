@@ -14,8 +14,8 @@ lib.mkIf config.nerv.capabilities.desktop {
     gpu-screen-recorder-gtk
     lm_sensors
     bluez-tools
-    blueman # waybar bluetooth on-click
-    networkmanagerapplet # nm-connection-editor, waybar network on-click
+    blueman # bluetooth GUI fallback, blueman-manager
+    networkmanagerapplet # nm-connection-editor fallback GUI
     papirus-icon-theme
     pavucontrol
     easyeffects

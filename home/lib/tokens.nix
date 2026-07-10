@@ -27,9 +27,9 @@
     };
   };
 
-  # Single source of truth for background translucency — kitty, waybar,
-  # rofi and hyprlock all read these directly (none of them support this via
-  # their native theming, which is why they were already hand-rolled).
+  # Single source of truth for background translucency — kitty reads this
+  # directly (it has no native opacity theming otherwise). DMS is
+  # deliberately not fed these values — it uses its own theming.
   opacity = {
     terminal = 0.85;
     applications = 0.85;
